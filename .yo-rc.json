@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Alberto",
+      "authorEmail": "alberto.colom.monfort@gmail.com",
+      "authorUrl": ""
+    }
+  }
+}
