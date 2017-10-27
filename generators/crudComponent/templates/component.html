@@ -1,0 +1,59 @@
+
+<div class="content24 <%= name %>Component" layout="column">
+        <div layout="column" ng-if="$ctrl.editItem" class="m-b-md editPanel">
+            <form novalidate 
+            name="$ctrl.formEdit" 
+            ng-submit="$ctrl.formEdit.$valid && $ctrl.save()"
+            
+            >
+                <md-toolbar class="md-hue-2">
+                    <div class="md-toolbar-tools">
+                        <span class="md-subhead">
+                            {{ ::$ctrl.textoTituloFormEditar }}
+                        </span>
+                        <span flex></span>
+    
+                        <md-button type="submit" class="md-fab md-button md-mini  md-green-400-bg md-ink-ripple s20 " aria-label="More">
+                            <md-tooltip md-direction="top" md-delay="0">Guardar</md-tooltip>
+                            <md-icon md-font-icon="icon-check " class="fa s20 white-500-fg"></md-icon>
+                        </md-button>
+                        <md-button class="md-fab md-button md-red-500-bg md-ink-ripple s20 md-mini" aria-label="More" ng-click="$ctrl.cancelEdit()">
+                            <md-tooltip md-direction="top" md-delay="0">Cancelar</md-tooltip>
+                            <md-icon md-font-icon="icon-close " class="fa s20 white-500-fg"></md-icon>
+                        </md-button>
+    
+                    </div>
+                </md-toolbar>
+                <div class="form-wrapper md-whiteframe-1dp" flex>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label>Descripcion</label>
+                            <input md-maxlength="255" required name="descripcion" ng-model="$ctrl.editItem.descripcion">
+                            <div ng-messages="$ctrl.formEdit.$error">
+                                <div ng-message="required">La descripcion es obligatoria.</div>
+                                <div ng-message="md-maxlength">La descripción debe ser menor de 255 carrácteres.</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="panelListadoElementos panelListadoElementos<%= Name %>">
+            <md-toolbar class="md-hue-2">
+                <div class="md-toolbar-tools">
+                    <span class="md-subhead">{{ ::textoTituloListadoElementos }}</span>
+                    <span flex></span>
+                    <md-button layout-align="center center" class="md-fab md-accent md-mini" ng-click="$ctrl.onAddItem()">
+                        <md-tooltip md-direction="top" md-delay="0">Nuevo</md-tooltip>
+                        <md-icon md-font-icon="icon-plus" class="fa s20 "></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <div layout="row">
+                <div class="simple-table-container md-whiteframe-4dp" flex>
+                    <div kendo-grid="$ctrl.grid"  kendo-grid-row-db-click="$ctrl.onEditItem(dataItem)" k-options="$ctrl.gridOptions"></div>
+                </div>
+            </div>
+        </div>
+    
+    </div>

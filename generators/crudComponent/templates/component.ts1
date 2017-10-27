@@ -1,0 +1,128 @@
+import * as angular from 'angular'
+<% if (service) { %>
+import { <%= Name %>Service } from './<%= name %>.service'
+<% } %>
+import template from './<%= name %>.component.html'
+import { KrAlert } from 'krUi/krAlert.service'
+<% if (css) { %>
+import "./<%= name %>.component.scss"
+<% } %>
+<% if (!index) { %>
+//import {  configrueComponent<%= Name %> } from './<%= name %>.component';
+//configureComponent<%= Name %>(module);
+<% } %>
+
+class Controller {
+
+    warningDeleteTitle:string = "Eliminar elemento";
+    warningDeleteConfirmButtonText:string = "Eliminar";
+    warningDelelteMessage(item) {
+      return   `Esta seguro que desea eliminar: ${item.descripcion}`
+    };
+
+    textoTituloFormEditar = 'Edición de <%= name %>';
+    textoTituloListadoElementos = 'Listado <%= name %>';
+
+    constructor(
+        <% if (service) { %> private <%= name %>Service: <%= Name %>Service, <% } %> 
+        private krAlert: KrAlert) {
+        "ngInject";
+    }
+
+    gridOptions: kendo.ui.GridOptions;
+    grid: kendo.ui.Grid;
+    editItem: any;
+    formEdit: ng.IFormController;
+
+    $onInit() {
+
+        //Creamos las columnas del grid
+        var columns: kendo.ui.GridColumn[] = [{
+            field: 'descripcion', title: 'Descripcion'
+        }, {
+                template: [
+                    '<md-button ng-click="$ctrl.onEditItem(dataItem)"><md-icon md-font-icon="icon-table-edit" class="icon s24"></md-icon></md-button>',
+                    '<md-button ng-click="$ctrl.onDeleteItem(dataItem)"><md-icon md-font-icon="icon-delete" class="icon s24"></md-icon></md-button>',
+                    `<md-menu>
+                        <md-button ng-click="$mdMenu.open($event)"  ng-mouseenter="$mdMenu.open($event)" class="md-icon-button" aria-label="Open sample menu">
+                            <md-icon md-menu-origin md-font-icon="icon-delete"></md-icon>
+                        </md-button>
+                        <md-menu-content>
+                            <md-menu-item><md-button ng-click="doSomething()">Do Something</md-button></md-menu-item>
+                        </md-menu-content>
+                    </md-menu>`
+                    //'<a class="editar" ng-click="$ctrl.onEditItem(dataItem)">Editar</a>',
+                    //'<a class="eliminar" ng-click="$ctrl.onDeleteItem(dataItem)">Eliminar</a>'
+                ].join('')
+        }
+        ];    
+
+        //Asignamos las propiedades al grid
+        this.gridOptions = this.<%= name %>Service.getGridOptions({
+            columns: columns
+        });
+        
+    }
+
+    onAddItem() {
+        this.editItem = {};
+    }
+
+    onEditItem(dataItem) {
+        //Deberiamos hacer un get para no trabajor con datos desactualizados
+        this.editItem = angular.copy(dataItem.toJSON());
+    }
+
+   
+
+    onDeleteItem(dataItem) {
+        this.krAlert.warning(this.warningDeleteTitle,this.warningDelelteMessage(dataItem), 
+            {
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonText: this.warningDeleteConfirmButtonText
+            })
+            .then(() => this.<%= name %>Service.delete(dataItem.id))
+            .then(() => this.reload());
+
+
+    }
+
+
+    cancelEdit() {
+        this.editItem = null;
+    }
+
+    save() {
+        let prom: ng.IPromise<any>;
+        if (this.editItem && this.editItem.id) {
+            prom = this.<%= name %>Service.update(this.editItem.id, this.editItem);
+        } else if (this.editItem) {
+            prom = this.<%= name %>Service.save(this.editItem);
+        }
+
+        if (prom) {
+            prom.then(() => this.reload())
+                .then(() => this.cancelEdit());
+        }
+    }
+
+
+    reload() {
+        this.grid.dataSource.read();
+    }
+    
+}
+let comp = {
+    controller: Controller,
+    template: template
+};
+
+
+const componentName = '<%= name %>'
+function configureComponent<%= Name %> (ngModule: ng.IModule)  {
+    ngModule.component(componentName, comp);
+}
+
+export {configureComponent<%= Name %> }
+

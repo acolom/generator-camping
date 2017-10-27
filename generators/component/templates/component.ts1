@@ -1,0 +1,44 @@
+import * as angular from 'angular'
+<% if (service) { %>
+import { <%= Name %>Service } from './<%= name %>.service'
+<% } %>
+import template from './<%= name %>.component.html'
+import { KrAlert } from 'krUi/krAlert.service'
+<% if (css) { %>
+import "./<%= name %>.component.scss"
+<% } %>
+<% if (!index) { %>
+//import {  configrueComponent<%= Name %> } from './<%= name %>.component';
+//configureComponent<%= Name %>(module);
+<% } %>
+class Controller {
+
+    constructor(
+        <% if (service) { %> private <%= name %>Service: <%= Name %>Service, <% } %> 
+        private krAlert: KrAlert) {
+        "ngInject";
+    }
+
+    $onInit() {
+    }
+
+    $onChanges() {
+    }
+
+    $onDestroy() {
+    }
+}
+
+
+let comp = {
+    controller: Controller,
+    template: template
+};
+
+
+const componentName = '<%= name %>'
+function configureComponent<%= Name %> (ngModule: ng.IModule)  {
+    ngModule.component(componentName, comp);
+}
+
+export {configureComponent<%= Name %> }

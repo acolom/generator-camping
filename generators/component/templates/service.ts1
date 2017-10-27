@@ -1,0 +1,21 @@
+import * as angular from 'angular'
+import { KrUrlCreator } from 'krConfig/krUrlCreator.service'
+
+<% if (!index) { %>
+//import {  configureService<%= Name %> } from './<%= name %>.service';
+//configureService<%= Name %>(module);
+<% } %>
+class <%= Name %>Service  {
+    constructor(
+        protected $http: ng.IHttpService,
+        private $q: ng.IQService
+       ) {
+        "ngInject";
+    }
+}
+
+function configureService<%= Name %>(ngModule: ng.IModule) {
+    ngModule.service('<%= name %>Service', <%= Name %>Service);
+}
+
+export { <%= Name %>Service, configureService<%= Name %> };

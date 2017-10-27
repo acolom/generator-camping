@@ -1,0 +1,58 @@
+import * as angular from 'angular'
+import { KrUrlCreator } from 'krConfig/krUrlCreator.service'
+import {  IKendoFactory } from 'krKendo/kendoFactory.service'
+import { SimpleCrudService } from '../../core/services/simpleCrudService'
+
+<% if (!index) { %>
+//import {  configureService<%= Name %> } from './<%= name %>.service';
+//configureService<%= Name %>(module);
+<% } %>
+
+const apiEndpointUrl = 'api/<%= Name %>';
+class <%= Name %>Service extends SimpleCrudService<any> {
+
+    endpoint: string;
+    
+    constructor(private $rootScope,
+        protected $http: ng.IHttpService,
+        private $q: ng.IQService,
+        private krUrlCreator: KrUrlCreator,
+        private kendoFactory: IKendoFactory
+       ) {
+        "ngInject";
+        super();
+
+        this.endpoint = krUrlCreator.get(apiEndpointUrl);
+    }
+
+    getUrl() {
+        return this.endpoint;
+    }
+
+    getRemoteDataSourceOptions(): kendo.data.DataSourceOptions{
+            return this.kendoFactory.getRemoteDataSource({
+                transport:{
+                    read: {
+                        url: this.endpoint
+                    }
+                }
+            });
+    }
+
+    getGridOptions(options: kendo.ui.GridOptions): kendo.ui.GridOptions{
+        var opt = angular.merge({
+            dataSource: this.getRemoteDataSourceOptions()
+        }, options);
+        return this.kendoFactory.getDefaultGridConfig(opt);
+        
+    }   
+}
+
+function configureService<%= Name %>(ngModule: ng.IModule) {
+    ngModule.service('<%= name %>Service', <%= Name %>Service);
+}
+
+export { <%= Name %>Service, configureService<%= Name %> };
+
+
+

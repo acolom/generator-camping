@@ -1,0 +1,19 @@
+import * as angular from 'angular'
+import { configureComponent<%= Name %> } from './<%= name %>.component'
+<% if (service) { %>import {  configureService<%= Name %>,  <%= Name %>Service } from './<%= name %>.service';<% } %>
+<% if (route) { %>import { configureRoute<%= Name %> } from './<%= name %>.route' <% } %>
+const nameModule = '<%= name %>';
+const module = angular.module(nameModule, [
+    <% if (route) { %> 'ui.router' <% } %>
+    ])
+
+configureComponent<%= Name %>(module);
+<% if (service) { %>configureService<%= Name %>(module);<% } %>
+<% if (route) { %>configureRoute<%= Name %>(module);<% } %>
+const moduleName = module.name;
+export { 
+    moduleName as <%= Name %>ModuleName
+    <% if (service) { %>, <%= Name %>Service  <% } %>
+}
+
+//import { <%= Name %>ModuleName } from './<%=name%>'

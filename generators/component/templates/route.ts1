@@ -1,0 +1,52 @@
+import * as angular from 'angular'
+import { IMsNavigationServiceProvider } from 'app/core/directives/msNavigationProvider/msNavigationService.provider'
+import { StateProvider } from '@uirouter/angularjs'
+
+<% if (!index) { %>
+//import { configureRoute<%= Name %> } form './<%= name %>.route.ts';
+//configureRoute<%= Name %>(ngModule);
+<% } %>
+//Variables que definen el estado
+const stateName = 'app.<%= name%>';
+const url = '/<%= name %>';
+const component = '<%= name %>';
+const stateData = {
+    // authorizeRoles: [roles.facturacion]
+};
+
+
+//Variables que definen el item del menu
+const registerMenu = true;
+const menuItemName = '<%= name %>';
+const menuTitle = '<%= name %>';
+const menuGoToState = stateName;
+const menuWeigth = 10;
+const isMenuItemGroup = false;
+
+function configureRoute<%= Name %> (ngModule: ng.IModule) {
+    ngModule.config(
+        ($stateProvider: StateProvider, 
+        msNavigationServiceProvider: IMsNavigationServiceProvider) => {
+        'ngInject'
+
+        $stateProvider
+            .state(stateName, {
+                url: url,
+                data: stateData,
+                views: {
+                    'content@app': {
+                        component: component
+                    }
+                }
+            })
+        if (registerMenu) {
+            msNavigationServiceProvider.saveItem(menuItemName, {
+                title: menuTitle,
+                state: menuGoToState,
+                weight: menuWeigth,
+                group: false
+            });
+        }
+    });
+}
+export { configureRoute<%= Name %> };
