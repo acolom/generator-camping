@@ -30,6 +30,15 @@ GeneratorName crudComponent Template: component.html FileVersion: 0.0.1
                 <div class="form-wrapper md-whiteframe-1dp" flex>
                     <div layout="row">
                         <md-input-container flex>
+                            <label>Nombre</label>
+                            <input md-maxlength="50" required name="nombre" 
+                                ng-model="$ctrl.editItem.nombre">
+                            <div ng-messages="$ctrl.formEdit.$error">
+                                <div ng-message="required">El nombre es obligatorio.</div>
+                                <div ng-message="md-maxlength">El nombre debe ser menor de 50 carrácteres.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
                             <label>Descripcion</label>
                             <input md-maxlength="255" required name="descripcion" ng-model="$ctrl.editItem.descripcion">
                             <div ng-messages="$ctrl.formEdit.$error">
@@ -54,6 +63,7 @@ GeneratorName crudComponent Template: component.html FileVersion: 0.0.1
             </md-toolbar>
             <div layout="row">
                 <div class="simple-table-container md-whiteframe-4dp" flex>
+                    <ul kendo-row-context-menu="$ctrl.onGetContextMenu(dataItem)"></ul>
                     <div kendo-grid="$ctrl.grid"  kendo-grid-row-db-click="$ctrl.onEditItem(dataItem)" k-options="$ctrl.gridOptions"></div>
                 </div>
             </div>
